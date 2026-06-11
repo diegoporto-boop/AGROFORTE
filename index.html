@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgroSustentável - Calculadora de CO2 e Insumos</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <h1>AgroSustentável 🌿</h1>
+        <p>Equilíbrio entre produção, economia e meio ambiente</p>
+    </header>
+
+    <main>
+        <section id="auth-section">
+            <div class="auth-tabs">
+                <button id="tab-login" class="auth-tab active" onclick="alternarAbas('login')">Entrar</button>
+                <button id="tab-cadastro" class="auth-tab" onclick="alternarAbas('cadastro')">Criar Conta</button>
+            </div>
+        
+            <form id="login-form" onsubmit="fazerLogin(event)">
+                <h2>Acesse sua Conta</h2>
+                <p class="auth-subtitle">Entre para gerenciar seus relatórios de sustentabilidade.</p>
+        
+                <label for="login-email">E-mail Corporativo / Produtor:</label>
+                <input type="email" id="login-email" placeholder="seu@email.com" required>
+        
+                <label for="login-senha">Senha:</label>
+                <input type="password" id="login-senha" placeholder="Sua senha" required>
+        
+                <button type="submit" class="btn-auth">Entrar no Sistema</button>
+            </form>
+        
+            <form id="cadastro-form" class="hidden" onsubmit="criarConta(event)">
+                <h2>Criar Conta Profissional</h2>
+                <p class="auth-subtitle">Comece a monitorar a pegada de carbono da sua propriedade.</p>
+        
+                <label for="cad-email">E-mail para Contato:</label>
+                <input type="email" id="cad-email" placeholder="exemplo@gmail.com" required>
+        
+                <label for="cad-senha">Crie uma Senha Forte:</label>
+                <input type="password" id="cad-senha" placeholder="Mínimo 6 caracteres" minlength="6" required>
+        
+                <label for="cad-senha-confirma">Confirme a Senha:</label>
+                <input type="password" id="cad-senha-confirma" placeholder="Digite a senha novamente" minlength="6" required>
+        
+                <button type="submit" class="btn-auth">Concluir Cadastro</button>
+            </form>
+        </section>
+
+        <section id="form-section" class="hidden"> 
+            <h2>Calculadora de Impacto Ambiental e Manejo</h2>
+            <p>Preencha os dados da sua propriedade para gerar o relatório personalizado.</p>
+            
+            <form id="agro-form">
+                <h3>1. Identificação</h3>
+                <label for="nome">Nome da Propriedade / Projeto:</label>
+                <input type="text" id="nome" placeholder="Ex: Fazenda Santa Maria" required>
+
+                <label for="area">Área Cultivada (em hectares):</label>
+                <input type="number" id="area" placeholder="Ex: 50" min="1" required>
+
+                <label for="cultura">Cultura Principal:</label>
+                <select id="cultura" required>
+                    <option value="milho">Milho</option>
+                    <option value="soja">Soja</option>
+                    <option value="pastagem">Pastagem / Pecuária</option>
+                </select>
+
+                <h3>2. Adubação</h3>
+                <label for="tipo-adubo">Tipo de Adubo mais utilizado:</label>
+                <select id="tipo-adubo" required>
+                    <option value="mineral">Mineral / Químico (Ureia, NPK)</option>
+                    <option value="organico">Orgânico (Esterco, Compostagem)</option>
+                </select>
+
+                <label for="qtd-adubo">Quantidade de adubo aplicada (kg por hectare):</label>
+                <input type="number" id="qtd-adubo" placeholder="Ex: 300" min="0" required>
+
+                <h3>3. Silagem</h3>
+                <label for="volume-silagem">Volume estimado de silagem por ano (Toneladas):</label>
+                <input type="number" id="volume-silagem" placeholder="Ex: 150" min="0" required>
+
+                <label for="vedacao">Tipo de Vedação do Silo:</label>
+                <select id="vedacao" required>
+                    <option value="simples">Lona Simples (Preta/Branca)</option>
+                    <option value="barreira">Lona Dupla Face com Barreira de Oxigênio</option>
+                </select>
+
+                <button type="button" onclick="calcularRelatorio()">Gerar Relatório Elaborado</button>
+            </form>
+        </section>
+
+        <section id="report-section" class="hidden">
+            <div class="badge-sustentavel">Relatório de Sustentabilidade</div>
+            <h2 id="rep-nome-propriedade">Fazenda X</h2>
+            <hr>
+            
+            <div class="resultado-grid">
+                <div class="card">
+                    <h4>Pegada de Carbono (CO₂)</h4>
+                    <p class="resultado-numero" id="rep-co2">0 t</p>
+                    <p class="descricao" id="rep-co2-Dica">Emissão estimada baseada no manejo atual.</p>
+                </div>
+
+                <div class="card">
+                    <h4>Recomendação de Adubo</h4>
+                    <p class="resultado-numero" id="rep-adubo">0 kg</p>
+                    <p class="descricao" id="rep-adubo-dica">Sugestão ideal para evitar desperdício econômico e ambiental.</p>
+                </div>
+
+                <div class="card">
+                    <h4>Eficiência da Silagem</h4>
+                    <p class="resultado-numero" id="rep-silagem">0%</p>
+                    <p class="descricao" id="rep-silagem-dica">Índice de aproveitamento da matéria seca do silo.</p>
+                </div>
+            </div>
+
+            <div class="conclusao-box">
+                <h3>Diagnóstico do Especialista</h3>
+                <p id="rep-diagnostico">Carregando análise...</p>
+            </div>
+
+            <button class="btn-voltar" onclick="voltarFormulario()">Refazer Novo Cálculo</button>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2026 AgroSustentável - Tecnologia para um Agro Forte</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
